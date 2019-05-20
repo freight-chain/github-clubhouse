@@ -20,6 +20,7 @@
     "test:run": "NODE_ENV=test ./node_modules/.bin/tape 'lib/**/__tests__/*.test.js' | ./node_modules/.bin/faucet",
     "test": "npm run build && npm run lint && npm run test:run"
   },
+  "files": ["lib/"],
   "keywords": [
     "github",
     "clubhouse"
