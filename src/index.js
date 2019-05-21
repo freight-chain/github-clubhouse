@@ -94,7 +94,7 @@ export async function githubIssueToClubhouseStory(options) {
     // log("issue", issue)
     log(`GitHub #${issue.number} --> `)
 
-    const existingStory = stories.find((story) => story.external_id === issue.number)
+    const existingStory = stories.find((story) => story.external_id === issue.html_url)
 
     if (existingStory) {
       logAppend('Story already exists. Skipping.')
@@ -170,11 +170,7 @@ function _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueCom
     labels: _presentGithubLabels(issueLabels),
     created_at: issue.created_at,
     updated_at: issue.updated_at,
-    external_id: issue.number,
-    external_tickets: [{
-      external_id: issue.number,
-      external_url: issue.html_url
-    }],
+    external_id: issue.html_url,
     requested_by_id: _mapUser(clubhouseUsersByName, issue.user.login, userMappings),
   }
 
