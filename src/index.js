@@ -159,7 +159,11 @@ function _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueCom
     labels: _presentGithubLabels(issueLabels),
     created_at: issue.created_at,
     updated_at: issue.updated_at,
-    external_id: issue.html_url,
+    external_id: issue.id,
+    external_tickets: [{
+      external_id: issue.id,
+      external_url: issue.html_url
+    }],
     requested_by_id: _mapUser(clubhouseUsersByName, issue.user.login, userMappings),
   }
 
