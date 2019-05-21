@@ -103,7 +103,7 @@ export async function githubIssueToClubhouseStory(options) {
       const issueComments = await getCommentsForIssue(options.githubToken, owner, repo, issue.number)
       const issueLabels = await getLabelsForIssue(options.githubToken, owner, repo, issue.number)
       // log("comments", issueComments)
-      log("labels", issueLabels)
+      // log("labels", issueLabels)
       const unsavedStory = _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueComments, issueLabels, userMappings)
       log("story", unsavedStory)
 
@@ -181,6 +181,14 @@ function _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueCom
   if (issue.state === 'closed') {
     story.workflow_state_id = stateId.done
     story.completed_at_override = issue.closed_at
+  }
+
+  const typeLabel = issueLabels.find(({ name }) => {
+    return name === 'bug' || name === 'chore' || name === 'feature'
+  })
+
+  if (typeLabel) {
+    story.story_type = typeLabel.name
   }
 
   return story
