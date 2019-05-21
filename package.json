@@ -74,6 +74,7 @@
     "bluebird": "^3.5.0",
     "build-url": "^1.1.2",
     "camelcase-object": "^1.0.0",
+    "loadsh": "^0.0.4",
     "lodash": "^4.17.11",
     "minimist": "^1.2.0",
     "node-fetch": "^1.6.3",
