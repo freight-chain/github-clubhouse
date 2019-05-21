@@ -5,7 +5,7 @@ const clubhouseHeaders = {
 }
 
 function apiURL(path, token) {
-  return {base: 'https://api.clubhouse.io/', path: 'api' + path, queryParams: {token}}
+  return {base: 'https://api.clubhouse.io/', path: 'api/beta' + path, queryParams: {token}}
 }
 
 export function getStory(token, storyId) {
