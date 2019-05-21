@@ -13,6 +13,11 @@ export function getStory(token, storyId) {
   return apiFetch(storyUrl, {headers: clubhouseHeaders})
 }
 
+export function listStories(token, projectId) {
+  const storiesUrl = apiURL(`/projects/${projectId}/stories`, token)
+  return apiFetch(storiesUrl, {headers: clubhouseHeaders})
+}
+
 export function listUsers(token) {
   const projectsUrl = apiURL('/members', token)
   return apiFetch(projectsUrl, {headers: clubhouseHeaders})

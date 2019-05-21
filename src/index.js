@@ -1,7 +1,7 @@
 import Bluebird from 'bluebird'
 
 import {getIssue, queryIssues, getCommentsForIssue, getLabelsForIssue, createIssue, createIssueComment} from './fetchers/gitHub'
-import {getStory, listUsers, listProjects, listWorkflows, createStory} from './fetchers/clubhouse'
+import {getStory, listStories, listUsers, listProjects, listWorkflows, createStory} from './fetchers/clubhouse'
 import {parseClubhouseStoryURL, parseGithubRepoURL} from './util/urlParse'
 import {log, logAppend} from './util/logging'
 
@@ -62,6 +62,9 @@ export async function githubIssueToClubhouseStory(options) {
     throw new Error(`The '${options.clubhouseProject}' project wasn't found in your Clubhouse`)
   }
 
+  log('Fetch Clubhouse stories for project')
+  const stories = await listStories(options.clubhouseToken, projectId)
+
   const {id: projectId} = project
 
   const [owner, repo] = options.githubRepo.split('/')
@@ -90,19 +93,27 @@ export async function githubIssueToClubhouseStory(options) {
   for (const issue of issues) {
     // log("issue", issue)
     log(`GitHub #${issue.number} --> `)
-    const issueComments = await getCommentsForIssue(options.githubToken, owner, repo, issue.number)
-    const issueLabels = await getLabelsForIssue(options.githubToken, owner, repo, issue.number)
-    // log("comments", issueComments)
-    // log("labels", issueLabels)
-    const unsavedStory = _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueComments, issueLabels, userMappings)
-    // log("story", unsavedStory)
 
-    if (!options.dryRun) {
-      const story = await createStory(options.clubhouseToken, unsavedStory)
-      logAppend(`Clubhouse #${story.id} ${story.name}`)
-      count += 1
-    } else {
-      logAppend('Not creating story for: ', issue.title)
+    const existingStory = stories.find((story) => story.external_id === issue.number)
+
+    if (existingStory) {
+      logAppend('Story already exists. Skipping.')
+    }
+    else {
+      const issueComments = await getCommentsForIssue(options.githubToken, owner, repo, issue.number)
+      const issueLabels = await getLabelsForIssue(options.githubToken, owner, repo, issue.number)
+      // log("comments", issueComments)
+      // log("labels", issueLabels)
+      const unsavedStory = _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueComments, issueLabels, userMappings)
+      // log("story", unsavedStory)
+
+      if (!options.dryRun) {
+        const story = await createStory(options.clubhouseToken, unsavedStory)
+        logAppend(`Clubhouse #${story.id} ${story.name}`)
+        count += 1
+      } else {
+        logAppend('Not creating story for: ', issue.title)
+      }
     }
   }
 
@@ -159,9 +170,9 @@ function _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueCom
     labels: _presentGithubLabels(issueLabels),
     created_at: issue.created_at,
     updated_at: issue.updated_at,
-    external_id: issue.id,
+    external_id: issue.number,
     external_tickets: [{
-      external_id: issue.id,
+      external_id: issue.number,
       external_url: issue.html_url
     }],
     requested_by_id: _mapUser(clubhouseUsersByName, issue.user.login, userMappings),
