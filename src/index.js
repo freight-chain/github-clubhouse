@@ -105,7 +105,7 @@ export async function githubIssueToClubhouseStory(options) {
       // log("comments", issueComments)
       // log("labels", issueLabels)
       const unsavedStory = _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueComments, issueLabels, userMappings)
-      log("story", unsavedStory)
+      // log("story", unsavedStory)
 
       if (!options.dryRun) {
         const story = await createStory(options.clubhouseToken, unsavedStory)
