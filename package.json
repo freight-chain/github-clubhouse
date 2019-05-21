@@ -19,7 +19,9 @@
     "test:run": "NODE_ENV=test ./node_modules/.bin/tape 'lib/**/__tests__/*.test.js' | ./node_modules/.bin/faucet",
     "test": "npm run build && npm run lint && npm run test:run"
   },
-  "files": ["lib/"],
+  "files": [
+    "lib/"
+  ],
   "keywords": [
     "github",
     "clubhouse"
@@ -67,14 +69,15 @@
     "instrument": true
   },
   "dependencies": {
+    "await-sleep": "^0.0.1",
     "babel-runtime": "^6.20.0",
     "bluebird": "^3.5.0",
+    "build-url": "^1.1.2",
+    "camelcase-object": "^1.0.0",
+    "lodash": "^4.17.11",
     "minimist": "^1.2.0",
     "node-fetch": "^1.6.3",
-    "parse-link-header": "^0.4.1",
-    "camelcase-object": "^1.0.0",
-    "build-url":"^1.1.2",
-    "await-sleep":"^0.0.1"
+    "parse-link-header": "^0.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
