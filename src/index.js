@@ -103,7 +103,7 @@ export async function githubIssueToClubhouseStory(options) {
       const issueComments = await getCommentsForIssue(options.githubToken, owner, repo, issue.number)
       const issueLabels = await getLabelsForIssue(options.githubToken, owner, repo, issue.number)
       // log("comments", issueComments)
-      // log("labels", issueLabels)
+      log("labels", issueLabels)
       const unsavedStory = _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueComments, issueLabels, userMappings)
       log("story", unsavedStory)
 
