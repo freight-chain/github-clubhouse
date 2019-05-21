@@ -35,10 +35,6 @@
     "email": "jeffrey@learnersguild.org"
   },
   "license": "ISC",
-  "engines": {
-    "node": "8.9.x",
-    "npm": "5.5.x"
-  },
   "xo": {
     "ignore": [
       "lib/**",
