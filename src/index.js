@@ -177,7 +177,7 @@ function _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueCom
     updated_at: issue.updated_at,
     external_id: issue.html_url,
     external_tickets: [{
-      external_id: issue.number,
+      external_id: issue.number.toString(),
       external_url: issue.html_url
     }],
     requested_by_id: _mapUser(clubhouseUsersByName, issue.user.login, userMappings),
