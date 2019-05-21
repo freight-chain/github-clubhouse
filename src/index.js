@@ -1,5 +1,7 @@
 import Bluebird from 'bluebird'
 
+import {map, includes} from 'loadsh'
+
 import {getIssue, queryIssues, getCommentsForIssue, getLabelsForIssue, createIssue, createIssueComment} from './fetchers/gitHub'
 import {getStory, listStories, listUsers, listProjects, listWorkflows, createStory} from './fetchers/clubhouse'
 import {parseClubhouseStoryURL, parseGithubRepoURL} from './util/urlParse'
@@ -94,7 +96,10 @@ export async function githubIssueToClubhouseStory(options) {
     // log("issue", issue)
     log(`GitHub #${issue.number} --> `)
 
-    const existingStory = stories.find((story) => story.external_id === issue.html_url)
+    const existingStory = stories.find((story) => {
+      return story.external_id === issue.html_url
+        || includes(map(story.external_tickets, 'external_url'), issue.html_url)
+    })
 
     if (existingStory) {
       logAppend('Story already exists. Skipping.')
@@ -171,6 +176,10 @@ function _issueToStory(clubhouseUsersByName, projectId, stateId, issue, issueCom
     created_at: issue.created_at,
     updated_at: issue.updated_at,
     external_id: issue.html_url,
+    external_tickets: [{
+      external_id: issue.number,
+      external_url: issue.html_url
+    }],
     requested_by_id: _mapUser(clubhouseUsersByName, issue.user.login, userMappings),
   }
 
