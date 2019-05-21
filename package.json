@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run clean && ./node_modules/.bin/babel -d lib/ src/",
     "clean": "./node_modules/.bin/rimraf ./lib/*",
-    "postinstall": "npm run build",
+    "postinstall": "npm install && npm run build",
     "prepublish": "npm run build && npm test",
     "2npm": "./node_modules/.bin/publish",
     "lint": "./node_modules/.bin/xo",
