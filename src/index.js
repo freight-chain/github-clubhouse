@@ -62,10 +62,10 @@ export async function githubIssueToClubhouseStory(options) {
     throw new Error(`The '${options.clubhouseProject}' project wasn't found in your Clubhouse`)
   }
 
+  const {id: projectId} = project
+
   log('Fetch Clubhouse stories for project')
   const stories = await listStories(options.clubhouseToken, projectId)
-
-  const {id: projectId} = project
 
   const [owner, repo] = options.githubRepo.split('/')
 
